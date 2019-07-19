@@ -1,4 +1,10 @@
 package com.sprint.demo.repos;
 
-public class UserRepository {
+
+import com.sprint.demo.model.User;
+import org.springframework.data.repository.CrudRepository;
+
+public interface UserRepository extends CrudRepository<User, Long>
+{
+    User findByUsername(String username);
 }

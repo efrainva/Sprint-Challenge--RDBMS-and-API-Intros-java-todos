@@ -1,6 +1,6 @@
 package com.sprint.demo.services;
 
-import com.lambdaschool.authenticatedusers.model.User;
+import com.sprint.demo.model.User;
 
 import java.util.List;
 
