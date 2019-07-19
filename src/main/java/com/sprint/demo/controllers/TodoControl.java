@@ -1,7 +1,7 @@
 package com.sprint.demo.controllers;
 
 import com.sprint.demo.model.Todo;
-import com.sprint.demo.services.UserService;
+import com.sprint.demo.services.TodoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -18,22 +18,22 @@ import java.util.List;
 @RequestMapping("/todo")
 public class TodoControl {
     @Autowired
-    private UserService userService;
+    private TodoService todoService;
 
     @GetMapping(value = "/todo",produces = {"application/json"} )
-    public ResponseEntity<?> listAllUsers(){
-        List<Todo> todo =  userService.findAll();
+    public ResponseEntity<?> listAllTodo(){
+        List<Todo> todo =  todoService.findAll();
         return  new ResponseEntity<>(todo, HttpStatus.OK);
     }
 
     @PostMapping(value = "/todo/",consumes = {"application"}, produces ={"application/json"})
-    public ResponseEntity <?> addNewUser(@Valid @RequestBody Todo newuser) throws URISyntaxException {
-        newuser = userService.save(newuser);
+    public ResponseEntity <?> addNewTodo(@Valid @RequestBody Todo newtodo) throws URISyntaxException {
+        newtodo = todoService.save(newtodo);
         HttpHeaders responseHeaders = new HttpHeaders();
         URI newUserURI = ServletUriComponentsBuilder
                 .fromCurrentRequest()
                 .path("/{todoid}")
-                .buildAndExpand(newuser.getTodoById())
+                .buildAndExpand(newtodo.getTodoid())
                 .toUri();
         responseHeaders.setLocation(newUserURI);
         return new ResponseEntity<>(null, responseHeaders,HttpStatus.CREATED);
@@ -42,15 +42,15 @@ public class TodoControl {
     }
 
     @PutMapping("/todo/{id}")
-    public ResponseEntity<?> updateUser(@RequestBody Todo updateUser, @PathVariable long id){
-        userService.update(updateUser,id);
+    public ResponseEntity<?> updateTodo(@RequestBody Todo updateTodo, @PathVariable long id){
+        todoService.update(updateTodo,id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @DeleteMapping("/todo/{id}")
-    public ResponseEntity<?> deleteUserById(@PathVariable long id)
+    public ResponseEntity<?> deleteTodoById(@PathVariable long id)
     {
-        userService.delete(id);
+        todoService.delete(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }

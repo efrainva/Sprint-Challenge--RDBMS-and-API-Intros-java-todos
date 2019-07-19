@@ -4,7 +4,7 @@ import com.sprint.demo.model.Role;
 
 import java.util.List;
 
-public class RoleService {
+public interface RoleService {
 
         List<Role> findAll();
 
@@ -13,7 +13,8 @@ public class RoleService {
         void delete(long id);
 
         Role save(Role role);
+
         Role update(Role role, long id);
-    }
+
 
 }

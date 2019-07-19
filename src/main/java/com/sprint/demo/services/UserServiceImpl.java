@@ -1,10 +1,9 @@
 package com.sprint.demo.services;
 
-import com.lambdaschool.authenticatedusers.model.Quote;
-import com.lambdaschool.authenticatedusers.model.User;
-import com.lambdaschool.authenticatedusers.model.UserRoles;
-import com.lambdaschool.authenticatedusers.repository.RoleRepository;
-import com.lambdaschool.authenticatedusers.repository.UserRepository;
+import com.sprint.demo.model.User;
+import com.sprint.demo.model.UserRole;
+import com.sprint.demo.repos.RoleRepository;
+import com.sprint.demo.repos.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -70,23 +69,6 @@ public class UserServiceImpl implements UserDetailsService, UserService
     @Override
     public User save(User user)
     {
-        User newUser = new User();
-        newUser.setUsername(user.getUsername());
-        newUser.setPasswordNoEncrypt(user.getPassword());
-
-        ArrayList<UserRoles> newRoles = new ArrayList<>();
-        for (UserRoles ur : user.getUserRoles())
-        {
-            newRoles.add(new UserRoles(newUser, ur.getRole()));
-        }
-        newUser.setUserRoles(newRoles);
-
-        for (Quote q : user.getQuotes())
-        {
-            newUser.getQuotes().add( new Quote(q.getQuote(), newUser));
-        }
-
-        return userrepos.save(newUser);
     }
 
     @Override
@@ -104,59 +86,4 @@ public class UserServiceImpl implements UserDetailsService, UserService
         }
     }
 
-    @Transactional
-    @Override
-    public User update(User user, long id)
-    {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        User currentUser = userrepos.findByUsername(authentication.getName());
-
-        if (currentUser != null)
-        {
-            if (id == currentUser.getUserid())
-            {
-                if (user.getUsername() != null)
-                {
-                    currentUser.setUsername(user.getUsername());
-                }
-
-                if (user.getPassword() != null)
-                {
-                    currentUser.setPasswordNoEncrypt(user.getPassword());
-                }
-
-                if (user.getUserRoles().size() > 0)
-                {
-                    // with so many relationships happening, I decided to go
-                    // with old school queries
-                    // delete the old ones
-                    rolerepos.deleteUserRolesByUserId(currentUser.getUserid());
-
-                    // add the new ones
-                    for (UserRoles ur : user.getUserRoles())
-                    {
-                        rolerepos.insertUserRoles(id, ur.getRole().getRoleid());
-                    }
-                }
-
-                if (user.getQuotes().size() > 0)
-                {
-                    for (Quote q : user.getQuotes())
-                    {
-                        currentUser.getQuotes().add( new Quote(q.getQuote(), currentUser));
-                    }
-                }
-                return userrepos.save(currentUser);
-            }
-            else
-            {
-                throw new EntityNotFoundException(Long.toString(id) + " Not current user");
-            }
-        }
-        else
-        {
-            throw new EntityNotFoundException(authentication.getName());
-        }
-
-    }
 }

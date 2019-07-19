@@ -2,7 +2,6 @@ package com.sprint.demo.controllers;
 
 
 import com.sprint.demo.model.User;
-import com.sprint.demo.model.UserRole;
 import com.sprint.demo.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -49,10 +48,6 @@ public class UserControl {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @DeleteMapping("/user/{id}")
-    public ResponseEntity<?> deleteUserById(@PathVariable long id)
-    {
-        userService.delete(id);
-        return new ResponseEntity<>(HttpStatus.OK);
-    }
+
+
 }

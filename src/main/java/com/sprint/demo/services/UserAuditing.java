@@ -1,4 +1,4 @@
-vpackage com.sprint.demo.services;
+package com.sprint.demo.services;
 
 import org.springframework.data.domain.AuditorAware;
 import org.springframework.security.core.Authentication;

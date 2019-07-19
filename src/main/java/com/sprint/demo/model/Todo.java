@@ -10,8 +10,12 @@ public class Todo extends Auditable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long todoid;
 
-    @Column(nullable = false,
-            unique =true)
-    private String username;
 
+    public long getTodoid() {
+        return todoid;
+    }
+
+    public void setTodoid(long todoid) {
+        this.todoid = todoid;
+    }
 }
