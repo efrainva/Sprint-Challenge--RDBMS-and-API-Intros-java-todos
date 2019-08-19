@@ -30,5 +30,4 @@ abstract class Auditable
     @Temporal(TemporalType.TIMESTAMP)
     protected Date lastModifiedDate;
 
-    public abstract String getPassword();
 }
